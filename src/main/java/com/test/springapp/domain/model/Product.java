@@ -25,7 +25,7 @@ public class Product extends BaseEntity<Long> implements AggregateRoot<Long> {
     protected Product() {
     }
     
-    // Factory method
+    // Factory method for creating new products
     public static Product create(String name, String description, BigDecimal price, Integer stockQuantity) {
         Product product = new Product();
         product.name = name;
@@ -50,7 +50,10 @@ public class Product extends BaseEntity<Long> implements AggregateRoot<Long> {
     
     public void adjustStock(Integer quantity) {
         if (this.stockQuantity + quantity < 0) {
-            throw new IllegalStateException("Insufficient stock");
+            throw new IllegalStateException(
+                String.format("Insufficient stock: current quantity is %d, requested adjustment is %d", 
+                    this.stockQuantity, quantity)
+            );
         }
         this.stockQuantity += quantity;
         this.updatedAt = Instant.now();

@@ -71,21 +71,29 @@ public class ProductRepositoryImpl implements ProductRepository {
     
     // Mapping methods
     private Product toDomain(ProductEntity entity) {
+        // Create product without validation since it's coming from persistence
         Product product = Product.create(
                 entity.getName(),
                 entity.getDescription(),
                 entity.getPrice(),
                 entity.getStockQuantity()
         );
-        // Use reflection to set ID (or provide a constructor in Product)
+        // Set the ID and timestamps from the persisted entity
         try {
-            var idField = Product.class.getSuperclass().getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.set(product, entity.getId());
+            setField(product, "id", entity.getId());
+            setField(product, "createdAt", entity.getCreatedAt());
+            setField(product, "updatedAt", entity.getUpdatedAt());
         } catch (Exception e) {
-            throw new RuntimeException("Failed to set product ID", e);
+            throw new RuntimeException("Failed to map ProductEntity to Product", e);
         }
         return product;
+    }
+    
+    private void setField(Object target, String fieldName, Object value) throws Exception {
+        var targetClass = fieldName.equals("id") ? target.getClass().getSuperclass() : target.getClass();
+        var field = targetClass.getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(target, value);
     }
     
     private ProductEntity toEntity(Product product) {
