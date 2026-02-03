@@ -284,8 +284,8 @@ Infrastructure Layer ───────────────────�
 
 ## Technologies
 
-- **Spring Boot 4.0.2**: Application framework
-- **Java 25**: Programming language
+- **Spring Boot 3.2.2**: Application framework
+- **Java 17**: Programming language
 - **Spring Data JPA**: Data access
 - **H2 Database**: In-memory database
 - **Lombok**: Reduce boilerplate

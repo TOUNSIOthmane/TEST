@@ -10,7 +10,7 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String hello() {
-        return "Hello from Spring Boot 4 with Java 25!";
+        return "Hello from Spring Boot 3 with Java 17!";
     }
 
     @GetMapping("/info")

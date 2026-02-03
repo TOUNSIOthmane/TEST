@@ -1,6 +1,6 @@
-# Spring Boot 4 Application with Java 25 - DDD Architecture
+# Spring Boot 3 Application with Java 17 - DDD Architecture
 
-A modern Spring Boot application built with Java 25 and Spring Boot 4.0.2, implementing **Domain-Driven Design (DDD)** architecture.
+A modern Spring Boot application built with Java 17 and Spring Boot 3.2.2, implementing **Domain-Driven Design (DDD)** architecture.
 
 ## 🏗️ Architecture
 
@@ -15,7 +15,7 @@ This application follows a comprehensive **Domain-Driven Design** architecture w
 
 ## Requirements
 
-- **Java 25** or higher
+- **Java 17** or higher
 - **Maven 3.9+**
 
 ## Project Structure
@@ -62,8 +62,8 @@ This application follows a comprehensive **Domain-Driven Design** architecture w
 
 ## Features
 
-- **Spring Boot 4.0.2**: Latest version with first-class Java 25 support
-- **Java 25**: Taking advantage of the latest JVM features
+- **Spring Boot 3.2.2**: Latest stable version
+- **Java 17**: Modern Java features
 - **Domain-Driven Design**: Clean architecture with separated layers
 - **REST API**: Comprehensive REST endpoints
 - **JPA & H2**: In-memory database for persistence
@@ -120,7 +120,7 @@ curl http://localhost:8080/api/hello
 
 **Response:**
 ```
-Hello from Spring Boot 4 with Java 25!
+Hello from Spring Boot 3 with Java 17!
 ```
 
 #### GET /api/info
@@ -134,7 +134,7 @@ curl http://localhost:8080/api/info
 
 **Response:**
 ```
-Spring Boot Version: 4.0.2, Java Version: 25.0.1
+Spring Boot Version: 3.2.2, Java Version: 17.0.18
 ```
 
 ### Product Management Endpoints
@@ -230,15 +230,14 @@ The H2 console is available at: http://localhost:8080/h2-console
 
 ## Technology Stack
 
-- **Java**: 25.0.1
-- **Spring Boot**: 4.0.2
-- **Spring Framework**: 7.0.3
+- **Java**: 17
+- **Spring Boot**: 3.2.2
 - **Spring Data JPA**: For data persistence
 - **H2 Database**: In-memory database
 - **Lombok**: Reduce boilerplate code
 - **MapStruct**: DTO mapping
-- **Maven**: 3.9.12
-- **JUnit**: 5.10.2 (via Spring Boot Starter Test)
+- **Maven**: Build tool
+- **JUnit**: 5.x (via Spring Boot Starter Test)
 
 ## License
 
