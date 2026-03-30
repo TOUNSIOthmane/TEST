@@ -1,0 +1,110 @@
+package com.test.springapp.infrastructure.repository;
+
+import com.test.springapp.domain.model.Product;
+import com.test.springapp.domain.model.ProductRepository;
+import com.test.springapp.infrastructure.persistence.JpaProductRepository;
+import com.test.springapp.infrastructure.persistence.ProductEntity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+/**
+ * Implementation of ProductRepository using JPA.
+ * Adapts between domain model and persistence model.
+ */
+@Component
+@RequiredArgsConstructor
+public class ProductRepositoryImpl implements ProductRepository {
+    
+    private final JpaProductRepository jpaRepository;
+    
+    @Override
+    public Product save(Product product) {
+        ProductEntity entity = toEntity(product);
+        ProductEntity savedEntity = jpaRepository.save(entity);
+        return toDomain(savedEntity);
+    }
+    
+    @Override
+    public Optional<Product> findById(Long id) {
+        return jpaRepository.findById(id).map(this::toDomain);
+    }
+    
+    @Override
+    public boolean existsById(Long id) {
+        return jpaRepository.existsById(id);
+    }
+    
+    @Override
+    public void delete(Product product) {
+        jpaRepository.deleteById(product.getId());
+    }
+    
+    @Override
+    public void deleteById(Long id) {
+        jpaRepository.deleteById(id);
+    }
+    
+    @Override
+    public List<Product> findAll() {
+        return jpaRepository.findAll().stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+    }
+    
+    @Override
+    public List<Product> findByNameContaining(String keyword) {
+        return jpaRepository.findByNameContainingIgnoreCase(keyword).stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+    }
+    
+    @Override
+    public List<Product> findInStock() {
+        return jpaRepository.findInStock().stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+    }
+    
+    // Mapping methods
+    private Product toDomain(ProductEntity entity) {
+        // Create product without validation since it's coming from persistence
+        Product product = Product.create(
+                entity.getName(),
+                entity.getDescription(),
+                entity.getPrice(),
+                entity.getStockQuantity()
+        );
+        // Set the ID and timestamps from the persisted entity
+        try {
+            setField(product, "id", entity.getId());
+            setField(product, "createdAt", entity.getCreatedAt());
+            setField(product, "updatedAt", entity.getUpdatedAt());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to map ProductEntity to Product", e);
+        }
+        return product;
+    }
+    
+    private void setField(Object target, String fieldName, Object value) throws Exception {
+        var targetClass = fieldName.equals("id") ? target.getClass().getSuperclass() : target.getClass();
+        var field = targetClass.getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(target, value);
+    }
+    
+    private ProductEntity toEntity(Product product) {
+        ProductEntity entity = new ProductEntity();
+        entity.setId(product.getId());
+        entity.setName(product.getName());
+        entity.setDescription(product.getDescription());
+        entity.setPrice(product.getPrice());
+        entity.setStockQuantity(product.getStockQuantity());
+        entity.setCreatedAt(product.getCreatedAt());
+        entity.setUpdatedAt(product.getUpdatedAt());
+        return entity;
+    }
+}
